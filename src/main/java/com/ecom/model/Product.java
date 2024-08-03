@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Product {
 
 	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO.IDENTITY)
+	@GeneratedValue( strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(length = 500)
