@@ -2,12 +2,14 @@ package com.ecom.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -25,10 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.model.UserDtls;
+import com.ecom.repository.UserRepository;
 import com.ecom.service.CategoryService;
 import com.ecom.service.ProductService;
 import com.ecom.service.UserService;
+import com.ecom.util.CommonUtil;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -42,6 +48,9 @@ public class HomeController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CommonUtil commonUtil;
 	
 	@ModelAttribute
 	public void getUserDetails(Principal p,Model m) 
@@ -114,4 +123,54 @@ public class HomeController {
 	return "redirect:/register";	
 	}
 	
+//	forget Password code
+	
+	@GetMapping("/forgot-password")
+	public String showForgotPassword() {
+		return "forgot_password.html";
+	}
+	
+	@PostMapping("/forgot-password")
+	public String processForgotPassword(@RequestParam String email,HttpSession session,HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		
+		UserDtls userByEmail = userService.getUserByEmail(email);
+		if(ObjectUtils.isEmpty(userByEmail)) 
+		{
+			session.setAttribute("errorMsg", "Invalid Email");
+		}
+		else {
+			
+			String resetToken = UUID.randomUUID().toString();
+			userService.updateUserResetToken(email,resetToken);
+			
+//			generate URL: http://localhost:8081/reset-password?token=vhdsbrsgwbgwebagaegRERB	
+			
+			String url=CommonUtil.generateUrl(request )+"/reset-password?token="+resetToken;
+			
+			
+			Boolean sendMail = commonUtil.sendMail(url,email);
+			if(sendMail)
+			{
+				session.setAttribute("succMsg", "Please check your email.... Password reset link sent");
+			}else {
+				session.setAttribute("errorMsg", "Something wrong on server!!! Email not send");
+			}
+		}
+		return "redirect:/forgot-password";
+	}
+	
+//	Reset Password code
+	
+	@GetMapping("/reset-password")
+	public String showResetPassword(@RequestParam String token,HttpSession session,Model m) {
+		
+		UserDtls userByToken = userService.getUserByToken(token);
+		
+		if(userByToken == null)
+		{
+			m.addAttribute("errorMsg","Your link is invalid or expired");
+			return "error";
+		}
+		return "reset_password";
+	}
 }

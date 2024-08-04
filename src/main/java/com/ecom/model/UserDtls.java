@@ -1,5 +1,7 @@
 package com.ecom.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,36 +17,46 @@ import lombok.Setter;
 @Setter
 @Entity
 public class UserDtls {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
-	
-	private String name;
-	
-	private String mobileNumber;
-	
-	private String email;
-	
-	private String address;
-	
-	private String city;
-	
-	private String state;
-	
-	private String pincode;
-	
-	private String password;
-	
-	private String profileImage;
-	
-	private String role;
-	
-	private boolean isEnable;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	private String name;
+
+	private String mobileNumber;
+
+	private String email;
+
+	private String address;
+
+	private String city;
+
+	private String state;
+
+	private String pincode;
+
+	private String password;
+
+	private String profileImage;
+
+	private String role;
+
+	private Boolean isEnable;
+
+	private Boolean accountNonLocked;
+
+	private Integer failedAttempt;
+
+	private Date locktime;
+
+	private String resetToken;
 	
+	
+
 	public UserDtls(Integer id, String name, String mobileNumber, String email, String address, String city,
-			String state, String pincode, String password, String profileImage, String role, boolean isEnable) {
+			String state, String pincode, String password, String profileImage, String role, Boolean isEnable,
+			Boolean accountNonLocked, Integer failedAttempt, Date locktime, String resetToken) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -58,14 +70,16 @@ public class UserDtls {
 		this.profileImage = profileImage;
 		this.role = role;
 		this.isEnable = isEnable;
-	}
-	
-	
-	public UserDtls() {
-		super();
-		// TODO Auto-generated constructor stub
+		this.accountNonLocked = accountNonLocked;
+		this.failedAttempt = failedAttempt;
+		this.locktime = locktime;
+		this.resetToken = resetToken;
 	}
 
+	public UserDtls() {
+		super();
+		
+	}
 
 	public Integer getId() {
 		return id;
@@ -155,24 +169,55 @@ public class UserDtls {
 		this.role = role;
 	}
 
-	public boolean getIsEnable() {
+	public Boolean getIsEnable() {
 		return isEnable;
 	}
 
-	public void setIsEnable(boolean isEnable) {
+	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
 	}
 
+	public Boolean getAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	public void setAccountNonLocked(Boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public Integer getFailedAttempt() {
+		return failedAttempt;
+	}
+
+	public void setFailedAttempt(Integer failedAttempt) {
+		this.failedAttempt = failedAttempt;
+	}
+
+	public Date getLocktime() {
+		return locktime;
+	}
+
+	public void setLocktime(Date locktime) {
+		this.locktime = locktime;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
 
 	@Override
 	public String toString() {
 		return "UserDtls [id=" + id + ", name=" + name + ", mobileNumber=" + mobileNumber + ", email=" + email
 				+ ", address=" + address + ", city=" + city + ", state=" + state + ", pincode=" + pincode
 				+ ", password=" + password + ", profileImage=" + profileImage + ", role=" + role + ", isEnable="
-				+ isEnable + "]";
+				+ isEnable + ", accountNonLocked=" + accountNonLocked + ", failedAttempt=" + failedAttempt
+				+ ", locktime=" + locktime + ", resetToken=" + resetToken + "]";
 	}
+
 	
-	
-	
-	
+
 }
