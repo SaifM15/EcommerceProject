@@ -33,7 +33,8 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 		String email = request.getParameter("username");
 
 		UserDtls userDtls = userRepository.findbyEmail(email);
-
+		
+	
 		if (userDtls.getIsEnable()) {
 			if (userDtls.getAccountNonLocked()) {
 				if (userDtls.getFailedAttempt() < AppConstant.ATTEMPT_TIME) {
@@ -44,6 +45,7 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 				}
 			} else {
 				if (userService.unlockAccountTimeExpired(userDtls)) {
+					 
 					exception = new LockedException(" Your Account is Unlocked !! Please Try to Login");
 
 				} else {
@@ -55,9 +57,9 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 		} else {
 			exception = new LockedException("your Account is Inactive");
 		}
-		
+	
 		super.setDefaultFailureUrl("/signin?error");
 		super.onAuthenticationFailure(request, response, exception);
 	}
+	}
 
-}

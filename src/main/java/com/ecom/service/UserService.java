@@ -24,6 +24,8 @@ public interface UserService {
 
 	public void updateUserResetToken(String email, String resetToken);
 	
-	public UserDtls getUserByToken(String Token);
+	public UserDtls getUserByToken(String token);
+	
+	public UserDtls updateUser(UserDtls user);
 
 }
