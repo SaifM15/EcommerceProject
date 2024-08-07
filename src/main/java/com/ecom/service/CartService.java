@@ -13,4 +13,6 @@ public interface CartService {
 	
 	public Integer getCountCart(Integer userId);
 
+	public void updatQuantity(String sy, Integer cid);
+
 }

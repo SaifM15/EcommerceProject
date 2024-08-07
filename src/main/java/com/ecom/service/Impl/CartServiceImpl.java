@@ -2,6 +2,7 @@ package com.ecom.service.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,14 +61,14 @@ public class CartServiceImpl implements CartService {
 		Double totalOrderPrice = 0.0;
 		List<Cart> updatedCarts = new ArrayList<>();
 		for (Cart c : carts) {
-			Double totalPrice = (c.getProduct().getDiscountPrice() * c.getQuantity()) ;
+			Double totalPrice = (c.getProduct().getDiscountPrice() * c.getQuantity());
 			c.setTotalPrice(totalPrice);
-			
+
 			totalOrderPrice = totalOrderPrice + totalPrice;
 			c.setTotalOrderPrice(totalOrderPrice);
 			updatedCarts.add(c);
 		}
-		
+
 		return updatedCarts;
 	}
 
@@ -75,6 +76,29 @@ public class CartServiceImpl implements CartService {
 	public Integer getCountCart(Integer userId) {
 		Integer countByUserId = cartRepository.countByUserId(userId);
 		return countByUserId;
+	}
+
+	@Override
+	public void updatQuantity(String sy, Integer cid) {
+
+		Cart cart = cartRepository.findById(cid).get();
+		int updateQuanity;
+		if (sy.equalsIgnoreCase("de")) {
+			updateQuanity = cart.getQuantity() - 1;
+			if (updateQuanity <= 0) {
+				cartRepository.delete(cart);
+			} else {
+				cart.setQuantity(updateQuanity);
+				cartRepository.save(cart);
+			
+			}
+		}else {
+			updateQuanity=cart.getQuantity()+1;
+			cart.setQuantity(updateQuanity);
+			cartRepository.save(cart);
+		
+		}
+		
 	}
 
 }
