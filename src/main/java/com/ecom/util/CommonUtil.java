@@ -43,31 +43,27 @@ public class CommonUtil {
 		
 	}
 	
-	String msg="<p>Thank you Order <b>[[orderStatus]].</b> </p>" 
-	+ "<p><b>Product Details :</b></p>"
-	+ "<p>Name : [[productName]]</p>"
-	+ "<p>Category : [[category]] </p>"
-	+ "<p>Quantity : [[quantity]] </p>"
-	+ "<p>Price : [[price]]</p>"
-	+ "<p>Payment Type : [[paymentType]]</p>";
+	String msg =null;
 
-	public Boolean sendMailForProductOrder(ProductOrder order,Integer statusCode) throws Exception {
+	public Boolean sendMailForProductOrder(ProductOrder order,String status) throws Exception {
+		
+		msg="<p>Hello [[name]],</p><p>Thank you for ordering [[productName]].Your Order status are <b>[[orderStatus]].</b> </p>" 
+				+ "<p><b>Product Details :</b></p>"
+				+ "<p>Name : [[productName]]</p>"
+				+ "<p>Category : [[category]] </p>"
+				+ "<p>Quantity : [[quantity]] </p>"
+				+ "<p>Price : [[price]]</p>"
+				+ "<p>Payment Type : [[paymentType]]</p>";
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 		
 		helper.setFrom("saifmulla2000@gmail.com"," Shopping cart");
 		helper.setTo(order.getOrderAddress().getEmail());
 		
-		OrderStatus[] values = OrderStatus.values();
-		for(OrderStatus status : values)
-		{
-			if(status.getId().equals(statusCode))
-			{
-				msg=msg.replace("[[orderStatus]]", status.getName());
-			}
-		}
+	
 		
-		
+		msg=msg.replace("[[name]]", order.getOrderAddress().getFirstName());
+		msg=msg.replace("[[orderStatus]]", status);
 		msg=msg.replace("[[productName]]", order.getProduct().getTitle());
 		msg=msg.replace("[[category]]", order.getProduct().getCategory());
 		msg=msg.replace("[[quantity]]", order.getQuantity().toString());
