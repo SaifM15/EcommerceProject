@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -47,6 +48,9 @@ public class UserController {
 
 	@Autowired
 	private CommonUtil commonUtil;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/home")
 	public String home() {
@@ -153,11 +157,11 @@ public class UserController {
 			}
 		}
 		ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
-		
+
 		try {
 			commonUtil.sendMailForProductOrder(updateOrder, status);
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
 		if (!ObjectUtils.isEmpty(updateOrder)) {
@@ -167,19 +171,40 @@ public class UserController {
 		}
 		return "redirect:/user/user-orders";
 	}
-	
+
 	@GetMapping("/profile")
 	public String profile() {
 		return "/user/profile";
 	}
-	
+
 	@PostMapping("/update-profile")
-	public String updateProfile(@ModelAttribute UserDtls user,@RequestParam MultipartFile img,HttpSession session) {
+	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
-		if(ObjectUtils.isEmpty(updateUserProfile)) {
+		if (ObjectUtils.isEmpty(updateUserProfile)) {
 			session.setAttribute("errorMsg", "Profile not update");
-		}else {
+		} else {
 			session.setAttribute("succMsg", "Profile updated");
+		}
+		return "redirect:/user/profile";
+	}
+
+	@PostMapping("/change-password")
+	public String changePassword(@RequestParam String newPassword, @RequestParam String currentPassword, Principal p ,HttpSession session) {
+
+		UserDtls loggedInUserDetails = getLoggedInUserDetails(p);
+		boolean matches = passwordEncoder.matches(currentPassword, loggedInUserDetails.getPassword());
+
+		if (matches) {
+				String encodePassword = passwordEncoder.encode(newPassword);
+				loggedInUserDetails.setPassword(encodePassword);
+				UserDtls updateUser = userService.updateUser(loggedInUserDetails);
+				if(ObjectUtils.isEmpty(updateUser)) {
+					session.setAttribute("errorMsg", "Password not Updated !! Error on Server");
+				}else {
+					session.setAttribute("succMsg", "Password update successfully...");
+				}
+		} else {
+			session.setAttribute("errorMsg", "Current Password Incorrect");
 		}
 		return "redirect:/user/profile";
 	}

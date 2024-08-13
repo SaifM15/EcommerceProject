@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
+import org.aspectj.lang.annotation.RequiredTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -53,10 +54,10 @@ public class HomeController {
 
 	@Autowired
 	private CommonUtil commonUtil;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private CartService cartService;
 
@@ -67,7 +68,7 @@ public class HomeController {
 			UserDtls userDtls = userService.getUserByEmail(email);
 			m.addAttribute("user", userDtls);
 			Integer countCart = cartService.getCountCart(userDtls.getId());
-			m.addAttribute("countCart",countCart);
+			m.addAttribute("countCart", countCart);
 		}
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory();
 		m.addAttribute("categorys", allActiveCategory);
@@ -175,26 +176,39 @@ public class HomeController {
 			m.addAttribute("msg", "Your link is invalid or expired !!!");
 			return "message";
 		}
-		m.addAttribute("token",token);
+		m.addAttribute("token", token);
 		return "reset_password";
 	}
 
 	@PostMapping("/reset-password")
-	public String resetPassword(@RequestParam String token, @RequestParam String password, HttpSession session,Model m) {
+	public String resetPassword(@RequestParam String token, @RequestParam String password, HttpSession session,
+			Model m) {
 
 		UserDtls userByToken = userService.getUserByToken(token);
 
 		if (userByToken == null) {
 			m.addAttribute("msg", "Your link is invalid or expired !!!");
 			return "message";
-		}else {
+		} else {
 			userByToken.setPassword(passwordEncoder.encode(password));
 			userByToken.setResetToken(null);
 			userService.updateUser(userByToken);
 //			session.setAttribute("succMsg", "Password Change Successfully");
-			m.addAttribute("msg","Password Change Successfully");
+			m.addAttribute("msg", "Password Change Successfully");
 			return "message";
 		}
+
+	}
+
+	@GetMapping("/search")
+	public String searchProduct(@RequestParam String ch, Model m) {
 		
+		List<Product> searchProducts = productService.searchProduct(ch);
+		m.addAttribute("products", searchProducts);
+
+		List<Category> categories = categoryService.getAllActiveCategory();
+		m.addAttribute("categories", categories);
+
+		return "product";
 	}
 }
