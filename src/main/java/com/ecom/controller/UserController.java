@@ -106,7 +106,6 @@ public class UserController {
 	private UserDtls getLoggedInUserDetails(Principal p) {
 		String email = p.getName();
 		UserDtls userDtls = userService.getUserByEmail(email);
-
 		return userDtls;
 
 	}

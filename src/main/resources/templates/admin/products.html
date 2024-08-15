@@ -9,18 +9,18 @@
 	<section>
 		<div class="container-fluid mt-4 p-3">
 			<div class="row">
-			<p class="text-center fs-3 mt-2">All Product</p>
+				<p class="text-center fs-3 mt-2">All Product</p>
 				<hr>
-					<th:block th:if="${session.succMsg}">
-							<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-							<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-						</th:block>
+				<th:block th:if="${session.succMsg}">
+					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
 
-						<th:block th:if="${session.errorMsg}">
-							<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-							<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+				<th:block th:if="${session.errorMsg}">
+					<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+					<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
 
-						</th:block>	
+				</th:block>
 				<a href="/admin/" class="text-decoration-none fs-4"> <i
 					class="fa-solid fa-circle-arrow-left"></i> Back
 				</a>
@@ -40,7 +40,7 @@
 					<form action="/admin/products" method="get">
 						<div class="row">
 							<div class="col">
-								<input type="text" class="form-control" name="ch" >
+								<input type="text" class="form-control" name="ch">
 							</div>
 							<div class="col">
 								<button class="btn btn-primary">Search</button>
@@ -48,10 +48,10 @@
 						</div>
 					</form>
 				</div>
-			
-				
+
+
 				<div class="card card-sh ">
-					<div class="card-body " >
+					<div class="card-body ">
 						<table class="table table-bordered ">
 							<thead class="table-light">
 								<tr>
@@ -90,11 +90,41 @@
 
 							</tbody>
 						</table>
+						<div class="row">
+							<div class="col-md-4">Total Products : [[${totalElement}]]</div>
+							<div class="col-md-6">
+								<nav aria-label="Page navigation example">
+									<ul class="pagination">
+
+										<li class="page-item"
+											th:classappend="${isFirst} ? 'disabled':''"><a
+											class="page-link"
+											th:href="@{'/admin/products?pageNo='+${pageNo-1} }"
+											aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+										</a></li>
+
+
+										<li th:each="i:${#numbers.sequence(1,totalPages)}"
+											class="page-item" th:classappend="${pageNo+1==i}?'active':''"
+											]]><a class="page-link"
+											th:href="@{'/admin/products?pageNo='+${i-1} }">[[${i}]]</a></li>
+
+
+										<li class="page-item"
+											th:classappend="${isLast} ? 'disabled':''"><a
+											class="page-link"
+											th:href="@{'/admin/products?pageNo='+${pageNo+1} }"
+											aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+										</a></li>
+									</ul>
+								</nav>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-			</div>
+		</div>
 	</section>
 </body>
 </html>
