@@ -1,4 +1,4 @@
-package com.ecom.controller;
+	package com.ecom.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -287,14 +287,21 @@ public class AdminController {
 	}
 
 	@GetMapping("/users")
-	public String getAllUsers(Model m) {
-		List<UserDtls> users = userService.getUsers("ROLE_USER");
+	public String getAllUsers(Model m,@RequestParam Integer type) {
+		List<UserDtls> users =null;
+		if(type==1) {
+			users = userService.getUsers("ROLE_USER");
+		}
+		else {
+			users = userService.getUsers("ROLE_ADMIN");
+		}
+		m.addAttribute("userType",type);
 		m.addAttribute("users", users);
 		return "/admin/users";
 	}
 
 	@GetMapping("/updateSts")
-	public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session) {
+	public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id,@RequestParam Integer type, HttpSession session) {
 		Boolean f = userService.updateAccountStatus(id, status);
 		if (f) {
 			session.setAttribute("succMsg", "Account Status Updated");
@@ -302,7 +309,7 @@ public class AdminController {
 			session.setAttribute("errorMsg", "Something wrong on server");
 
 		}
-		return "redirect:/admin/users";
+		return "redirect:/admin/users?type="+type;
 	}
 
 	@GetMapping("/orders")

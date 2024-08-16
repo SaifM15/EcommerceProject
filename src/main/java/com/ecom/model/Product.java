@@ -19,7 +19,7 @@ public class Product {
 
 	@Id
 	@GeneratedValue( strategy = GenerationType.AUTO)
-	private int id;
+	private Integer id;
 
 	@Column(length = 500)
 	private String title;
@@ -67,7 +67,7 @@ public class Product {
 		this.discountPrice = discountPrice;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

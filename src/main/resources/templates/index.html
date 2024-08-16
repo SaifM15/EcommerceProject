@@ -41,17 +41,20 @@
 		<div class="container">
 			<div class="row">
 				<p class="text-center fs-4">Category</p>
-				<div class="col-md-2">
+
+				<div class="col-md-2" th:each="c:${category}">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
-							<img src=img/category_image/appli.png width="65%" height="140px">
-							<p>Electronics</p>
+							<img th:src="@{'img/category_image/'+${c.imageName}}" width="65 %"
+								height="140px"><br> <a
+								th:href="@{'/products?category='+${c.name}}"
+								class="text-decoration-none ">[[${c.name}]]</a>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -59,9 +62,9 @@
 							<p>Beauty</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -69,9 +72,9 @@
 							<p>Clothes</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -79,9 +82,9 @@
 							<p>Laptop</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="col-md-2">
+				<!-- <div class="col-md-2">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -89,9 +92,9 @@
 							<p>Mobile</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="col-md-2">
+				<!-- 	<div class="col-md-2">
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -100,7 +103,7 @@
 							<p>Glocery</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 
 			</div>
@@ -111,7 +114,21 @@
 		<div class="container-fluid bg-limit p-3">
 			<div class="row">
 				<p class="text-center fs-4">Latest Product</p>
-				<div class="col-md-3">
+				<div class="col-md-3" th:each="p:${products}">
+					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+						<div class="card-body text-center">
+							<img alt="" th:src="@{'img/product_image/'+${p.image}}" class=""
+								width="65%" height="140px"><br>
+							<br>
+							<p class="text-center ">
+								<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none" >[[${p.title}]]</a>
+							</p>
+							
+						</div>
+					</div>
+				</div>
+
+				<!-- 	<div class="col-md-3">
 					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
 							<img alt="" src="img/product_image/laptop.jpg" class=""
@@ -119,19 +136,9 @@
 							<p class="text-center ">HP Laptop</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="col-md-3">
-					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-						<div class="card-body text-center">
-							<img alt="" src="img/product_image/laptop.jpg" class=""
-								width="65%" height="140px">
-							<p class="text-center ">HP Laptop</p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-3">
+				<!-- <div class="col-md-3">
 					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
 						<div class="card-body text-center">
 							<img alt="" src="img/product_image/laptop.jpg" class=""
@@ -139,8 +146,8 @@
 							<p class="text-center ">HP Laptop</p>
 						</div>
 					</div>
-				</div>
-
+				</div> -->
+				<!-- 
 				<div class="col-md-3">
 					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
@@ -149,7 +156,7 @@
 							<p class="text-center ">HP Laptop</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<!--  End latest product Module -->
