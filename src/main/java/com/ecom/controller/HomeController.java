@@ -138,10 +138,18 @@ public class HomeController {
 		m.addAttribute("product", productById);
 		return "view_product";
 	}
+	
 
 	@PostMapping("/saveUser")
 	public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
 			throws IOException {
+		
+		Boolean existsEmail = userService.existsEmail(user.getEmail());
+		
+		if(existsEmail) {
+			session.setAttribute("errorMsg", "Email id already exists");
+		}else {
+			
 		String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
 		user.setProfileImage(imageName);
 		UserDtls saveUser = userService.saveUser(user);
@@ -160,7 +168,7 @@ public class HomeController {
 			session.setAttribute("succMsg", "Register Successfully");
 		} else {
 			session.setAttribute("errorMsg", "Something Wrong on Server");
-		}
+		}}
 		return "redirect:/register";
 	}
 

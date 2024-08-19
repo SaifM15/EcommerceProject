@@ -27,6 +27,7 @@ import com.ecom.util.AppConstant;
 @Service
 public class UserServiceImpl implements UserService {
 
+
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -180,6 +181,14 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(encodePassword);
 		UserDtls saveUser = userRepository.save(user);
 		return saveUser;
+	}
+
+	
+	@Override
+	public Boolean existsEmail(String email) {
+	
+		
+		return userRepository.existsByEmail(email);
 	}
 	
 	
