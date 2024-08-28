@@ -11,6 +11,7 @@
 		<div id="carouselExample" class="carousel slide">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
+				
 					<img src="img/profile_image/ecom1.png" class="d-block w-100"
 						alt="..." height="350px">
 				</div>
@@ -46,8 +47,9 @@
 					<div
 						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
+						<div class="box">
 							<img th:src="@{'img/category_image/'+${c.imageName}}" width="65 %"
-								height="140px"><br> <a
+								height="140px"></div><br> <a
 								th:href="@{'/products?category='+${c.name}}"
 								class="text-decoration-none ">[[${c.name}]]</a>
 						</div>
@@ -117,8 +119,9 @@
 				<div class="col-md-3" th:each="p:${products}">
 					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 						<div class="card-body text-center">
+						<div class="box">
 							<img alt="" th:src="@{'img/product_image/'+${p.image}}" class=""
-								width="65%" height="140px"><br>
+								width="65%" height="140px"></div><br>
 							<br>
 							<p class="text-center ">
 								<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none" >[[${p.title}]]</a>
