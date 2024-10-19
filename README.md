@@ -11,9 +11,6 @@ while providing administrators with the ability to manage users, view orders, an
 - Shopping Cart: Users can add items to their cart and proceed to checkout.
 - Authentication & Authorization: Implemented secure login and role-based access control.
 
-## Demo 🎥
-- Screenshot of the application in action (replace with actual screenshot)
-
 ## Installation and Setup 🔧
 
 ### Prerequisites
